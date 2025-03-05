@@ -1,7 +1,0 @@
-1. 우분투 서버 설치
-https://ubuntu.com/download/server
-
-2. VMWare 설치
-https://softwareupdate.vmware.com/cds/vmw-desktop/player/17.5.2/23775571/windows/core/
-
-3. 
