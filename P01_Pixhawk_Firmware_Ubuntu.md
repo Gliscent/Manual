@@ -1,6 +1,6 @@
 Ubuntu(VMWare) + Pixhawk Firmware (PX4, Ardupilot)
 ---
-VMWare는 윈도우에서 우분투를 돌리게 하는 프로그램으로, 리눅스 OS일 경우 VMWare 설치 X
+VMWare는 윈도우에서 우분투를 돌리게 하는 프로그램으로, 리눅스 OS일 경우 VMWare 설치 X wow
 
 ## 1. 우분투 서버 설치
 https://ubuntu.com/download/server
