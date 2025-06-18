@@ -9,8 +9,9 @@ import airsim
 
 client = airsim.MultirotorClient()
 client.confirmConnection()
+print(client.listVehicles())
 
-vehicle_name = "Drone1"
+vehicle_name = "Drone2"
 client.enableApiControl(True, vehicle_name=vehicle_name)
 client.armDisarm(True)
 client.takeoffAsync().join()
@@ -32,41 +33,41 @@ def track(duration_sec=10, interval_sec=0.2):
 x, y, z = 50, 13, 20
 
 
-# 1. yaw를 초기 상태로 고정
-client.moveToPositionAsync(y, x, -z, 5)
-track(10)
-client.moveToPositionAsync(0, 0, -z, 5)
-track(10)
-
-# 2. yaw를 특정 방향으로 고정
-client.moveToPositionAsync(
-    y, x, -z, 5,
-    yaw_mode=airsim.YawMode(is_rate=False, yaw_or_rate=30),
-    vehicle_name=vehicle_name
-)
-time.sleep(10.0)
-client.moveToPositionAsync(
-    0, 0, -z, 5,
-    yaw_mode=airsim.YawMode(is_rate=False, yaw_or_rate=30),
-    vehicle_name=vehicle_name
-)
-time.sleep(10.0)
-
-# 3. yaw 일정 각속도
-client.moveToPositionAsync(
-    y, x, -z, 5,
-    drivetrain=airsim.DrivetrainType.MaxDegreeOfFreedom,
-    yaw_mode=airsim.YawMode(is_rate=True, yaw_or_rate=50),  # 초당 10도 회전
-    vehicle_name=vehicle_name
-)
-time.sleep(10.0)
-client.moveToPositionAsync(
-    0, 0, -z, 5,
-    drivetrain=airsim.DrivetrainType.MaxDegreeOfFreedom,
-    yaw_mode=airsim.YawMode(is_rate=True, yaw_or_rate=50),  # 초당 10도 회전
-    vehicle_name=vehicle_name
-)
-time.sleep(10.0)
+# # 1. yaw를 초기 상태로 고정
+# client.moveToPositionAsync(y, x, -z, 5)
+# track(10)
+# client.moveToPositionAsync(0, 0, -z, 5)
+# track(10)
+#
+# # 2. yaw를 특정 방향으로 고정
+# client.moveToPositionAsync(
+#     y, x, -z, 5,
+#     yaw_mode=airsim.YawMode(is_rate=False, yaw_or_rate=30),
+#     vehicle_name=vehicle_name
+# )
+# time.sleep(10.0)
+# client.moveToPositionAsync(
+#     0, 0, -z, 5,
+#     yaw_mode=airsim.YawMode(is_rate=False, yaw_or_rate=30),
+#     vehicle_name=vehicle_name
+# )
+# time.sleep(10.0)
+#
+# # 3. yaw 일정 각속도
+# client.moveToPositionAsync(
+#     y, x, -z, 5,
+#     drivetrain=airsim.DrivetrainType.MaxDegreeOfFreedom,
+#     yaw_mode=airsim.YawMode(is_rate=True, yaw_or_rate=50),  # 초당 10도 회전
+#     vehicle_name=vehicle_name
+# )
+# time.sleep(10.0)
+# client.moveToPositionAsync(
+#     0, 0, -z, 5,
+#     drivetrain=airsim.DrivetrainType.MaxDegreeOfFreedom,
+#     yaw_mode=airsim.YawMode(is_rate=True, yaw_or_rate=50),  # 초당 10도 회전
+#     vehicle_name=vehicle_name
+# )
+# time.sleep(10.0)
 
 
 # 착륙 및 정리

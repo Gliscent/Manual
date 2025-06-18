@@ -7,6 +7,9 @@ Ubuntu : PX4 && Window : Airsim, Python
 pip install msgpack-rpc-python==0.4.1
 pip install msgpack-python==0.5.6
 pip install airsim
+
+sudo apt install geographiclib-tools
+sudo geographiclib-get-geoids egm96-5
 ```
 --> 잘 안되면 gpt 형한테 물어보기
 
@@ -174,72 +177,85 @@ cv2.destroyAllWindows()
 
 추측 : 파이썬에서는 TCP 포트 4560만 지원해서 멀티 드론이 안된다.
 
-setting.json을 다음과 같이 설정
+setting.json을 다음과 같이 설정 (ip 설정은 다르게 해야함)
 ```bash
 {
   "SettingsVersion": 1.2,
   "SimMode": "Multirotor",
   "ClockType": "SteppableClock",
+  "OriginGeopoint": {
+    "Latitude": 47.641468,
+    "Longitude": -122.140165,
+    "Altitude": 0
+  },
+
   "Vehicles": {
     "Drone1": {
       "VehicleType": "PX4Multirotor",
+      "X": 4,
+      "Y": 0,
+      "Z": -2,
+      "Yaw": -180,
       "UseSerial": false,
       "Lockstep": true,
       "UseTcp": true,
       "QgcHostIp": "",
       "TcpPort": 4560,
-      "UdpPort": 14580,
-      "ControlIp": "192.168.91.128",
-      "LocalHostIp": "192.168.91.1",
+      "ControlIp": "192.168.10.13",
+      "LocalHostIp": "0.0.0.0",
       "Sensors": {
         "barometer": {
           "SensorType": 1,
           "Enabled": true,
           "PressureFactorSigma": 0.0001825
         }
-      },
-      "X": 0,
-      "Y": 0,
-      "Z": 0
+      }
     },
+
     "Drone2": {
       "VehicleType": "PX4Multirotor",
+      "X": 8,
+      "Y": 0,
+      "Z": -2,
       "UseSerial": false,
       "Lockstep": true,
       "UseTcp": true,
+      "UseUdp": true,
       "QgcHostIp": "",
-      "TcpPort": 4562,
-      "UdpPort": 14582,
-      "ControlIp": "192.168.91.128",
-      "LocalHostIp": "192.168.91.1",
+      "TcpPort": 4561,
+      "ControlIp": "192.168.10.13",
+      "LocalHostIp": "0.0.0.0",
       "Sensors": {
         "barometer": {
           "SensorType": 1,
           "Enabled": true,
           "PressureFactorSigma": 0.0001825
         }
-      },
-      "X": 10,
-      "Y": 0,
-      "Z": 0
+      }
+
     }
 
   }
 }
+
 ```
 
 2개의 터미널 창을 열고, 각각 아래와 같이 입력
 ```
-cd PX-Autopilot
-PX4_SIM_MODEL=none_iris ./build/px4_sitl_default/bin/px4 -i 0 ./ROMFS/px4fmu_common -s etc/init.d-posix/rcS
-```
-```
-cd PX-Autopilot
-PX4_SIM_MODEL=none_iris ./build/px4_sitl_default/bin/px4 -i 2 ./ROMFS/px4fmu_common -s etc/init.d-posix/rcS
-```
-참고 사항 : -i X 는 TCP 포트 4560+X 를 연다.
+cd PX4-Autopilot
+PX4_SIM_MODEL=none_iris ./build/px4_sitl_default/bin/px4 -i 0
+mavlink stop-all
+mavlink start -u 14580 -r 4000000 -m onboard -o 14540 -t 127.0.0.1
+# PX4_SIM_MODEL=none_iris ./build/px4_sitl_default/bin/px4 -i 0 ./ROMFS/px4fmu_common -s etc/init.d-posix/rcS -d "mavlink stop-all; mavlink start -u 14580 -r 4000000 -m onboard -o 14540 -t 127.0.0.1"
 
-각 터미널에서 commander ~~ 로 제어 명령
 
-## 5. 멀티 드론 (ROS2)
 
+cd PX4-Autopilot
+PX4_SIM_MODEL=none_iris ./build/px4_sitl_default/bin/px4 -i 1
+mavlink stop-all
+mavlink start -u 14581 -r 4000000 -m onboard -o 14541 -t 127.0.0.1
+# PX4_SIM_MODEL=none_iris ./build/px4_sitl_default/bin/px4 -i 1 ./ROMFS/px4fmu_common -s etc/init.d-posix/rcS -d "mavlink stop-all; mavlink start -u 14581 -r 4000000 -m onboard -o 14541 -t 127.0.0.1"
+```
+참고 사항 : -i X 는 TCP 포트 4560+X 를 연다는 뜻.
+
+각 터미널에서 commander ~~ 로 기동 명령

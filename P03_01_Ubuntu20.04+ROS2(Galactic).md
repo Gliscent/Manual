@@ -1,4 +1,5 @@
-# Ubuntu + ROS2(Galactic)
+Ubuntu + ROS2 (Galactic)
+---
 Ubuntu 20.04에서만 가능함. 아래 명령어들은 드론과 관련이 있음.
 
 ## 1. ROS2 galactic 설치
