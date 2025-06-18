@@ -83,25 +83,26 @@ catkin config --source-space src
 catkin build
 ```
 
-## 5. VMware 설정
+## 5. VMware 설정 (선택)
 #### 1. 왼쪽 상단에 Player > Manage > Virtual Machine Settings > Network Adapter > Bridged 선택
 #### 2. 재부팅
 #### 3. 브릿지 노드 실행 (airsim 드론의 정보를 가져옴)
 #### 4. IP 주소 변경
 ##### 1) 에어심 쪽 setting.json 에서 IP 변경 (내 컴퓨터 기준 -> "ControlIp": "192.168.10.13", "LocalHostIp": "192.168.10.5")
 ##### 2) ~/.bashrc 에서 export PX4_SIM_HOST_ADDR IP 변경
-####  5. topic 내용 가져오기
+####  5. airsim topic 확인 ```rostopic list```
 
 ## 6. Mavlink 프로토콜 UDP 노드
 
-혹시 PX4 펌웨어를 아직 안 다운 받았으면 메뉴얼 P01 참고
+혹시 PX4 펌웨어를 아직 안 다운 받았으면 메뉴얼 P01 참고.
 
 아래 나올 내용은 airsim 패키지가 아니라 mavlink 통신 노드로 접근.
 
-그렇기 때문에 mavlink 정보를 보낼 UDP 주소를 127.0.0.1로 로컬화.
+윈도우 쪽 airsim 정보를 가져오지 않고, 직접 PX4에서 정보를 종합.
 
-윈도우 쪽 airsim 종합 정보를 사용하지 않고, 직접 PX4에서 정보를 종합.
+그래서 mavlink 통신을 할 때 보낼 주소를 UDP 127.0.0.1로 로컬화.
 
+아래 진행하기 전에 인스턴스 확인 (-i X 에서 X숫자가 tcp 포트와 일치하는지 체크)
 
 ### 터미널1
 ```
@@ -116,8 +117,10 @@ PX4_SIM_MODEL=none_iris ./build/px4_sitl_default/bin/px4 -i 1 ./ROMFS/px4fmu_com
 ```
 
 ### 터미널3
-우선 .launch 파일을 만들어야 함.
-혹시 잘 진행이 안된다면 ```mavlink status``` 로 UDP 포트 보기
+편의상 .launch 파일을 만들어야 함.
+혹시 잘 진행이 안된다면 ```mavlink status``` 로 UDP 포트 번호 보기
+
+launch 파일은 가장 편한 위치에 생성.
 ```
 nano multi_mavros.launch
 ```
@@ -140,9 +143,6 @@ nano multi_mavros.launch
     </node>
   </group>
 </launch>
-
-
-
 ```
 
 ```
