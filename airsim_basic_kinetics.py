@@ -6,6 +6,7 @@ import airsim
 # 명령 사이 사이 딜레이를 넣어야 명령 중복 에러 방지
 # 되도록 moveToPositionAsync 명령어에 .join 쓰지 말기
 
+ # donghwan test
 
 client = airsim.MultirotorClient()
 client.confirmConnection()
